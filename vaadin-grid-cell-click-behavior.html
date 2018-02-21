@@ -8,11 +8,22 @@
    */
   vaadin.elements.grid.CellClickBehavior = {
 
-    listeners: {
-      'click': '_onClick'
-    },
+	  properties: {
+		  // taken from https://github.com/vaadin/vaadin-grid/blob/v4.0.0-alpha3/vaadin-grid.html#L243
+		  _ie: {
+			  type: Boolean,
+			  value: function() {
+				  return !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+			  }
+		  },
+	  },
+	ready: function() {
+		// using mousedown event rather than click for IE because of focus-click event problems in IE
+		this._ie ? this.addEventListener("mousedown", this._onClick, true) : this.addEventListener("click", this._onClick, true);
+	},
 
     attached: function() {
+
       this._cellContentFocusHandler = function(e) {
         // IE11 fires `focus` events for the cell content element even when nothing
         // focusable was clicked.
@@ -39,6 +50,7 @@
         this.fire('cell-focus', {cell: this});
       }
 
+
       // Prevent item action if cell itself is not focused.
       if (this._cellClick) {
         var target = Polymer.dom(e).localTarget;
@@ -48,7 +60,7 @@
           target = Polymer.dom(target).getDistributedNodes()[0];
         }
 
-        var path = Polymer.dom(e).path;
+		var path = Polymer.dom(e).path;
         var elementsClicked = Array.prototype.slice.call(path, 0, path.indexOf(target) + 1);
         if (!target.contains(this.target && this.target.root.activeElement || document.activeElement) &&
             !elementsClicked.some(this._isFocusable)) {
