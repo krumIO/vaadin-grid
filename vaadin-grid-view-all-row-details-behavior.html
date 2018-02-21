@@ -1,0 +1,45 @@
+<script>
+  window.vaadin = window.vaadin || {};
+  vaadin.elements = vaadin.elements || {};
+  vaadin.elements.grid = vaadin.elements.grid || {};
+
+  /**
+   * @polymerBehavior vaadin.elements.grid.SelectionBehavior
+   */
+  vaadin.elements.grid.ViewAllRowDetailsBehavior = {
+
+    properties: {
+
+		/**
+		* A Boolean that keeps track whether if all rows are expaneded or not.
+		*/
+		expandAll: {
+			type: Boolean,
+			value: false,
+		},
+    },
+
+	_rowDetailsDesc: function() {
+		this.set("expandAll", !this.expandAll);
+		this._expandAllRows(this.expandAll);
+    },
+
+	_expandAllRows: function(expandAll) {
+		var arr = [];
+		this.$.scroller._physicalItems.forEach(function(row) {
+			if(row && row.item) {
+				row.expanded = expandAll;
+				row.item.expanded = expandAll;
+				if(expandAll) {
+					arr.push(row.item)
+				}
+			}
+
+		}.bind(this));
+
+		this.set('expandedItems', arr);
+	},
+
+};
+
+</script>

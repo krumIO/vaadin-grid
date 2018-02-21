@@ -206,6 +206,7 @@ first element in the cell will be focused. You can override the behavior by appl
 <link rel="import" href="vaadin-grid-sort-behavior.html">
 <link rel="import" href="vaadin-grid-filter-behavior.html">
 <link rel="import" href="vaadin-grid-column-reordering-behavior.html">
+<link rel="import" href="vaadin-grid-view-all-row-details-behavior.html">
 
 <dom-module id="vaadin-grid">
   <template>
@@ -276,7 +277,6 @@ first element in the cell will be focused. You can override the behavior by appl
         notify: true
       },
 
-
       /**
        * Estimated size of the grid data (number of items).
        * When using function data providers, it always needs to be set manually.
@@ -305,7 +305,8 @@ first element in the cell will be focused. You can override the behavior by appl
       vaadin.elements.grid.SortBehavior,
       vaadin.elements.grid.FilterBehavior,
       vaadin.elements.grid.ColumnReorderingBehavior,
-      vaadin.elements.grid.TableKeyboardBehavior
+      vaadin.elements.grid.TableKeyboardBehavior,
+	  vaadin.elements.grid.ViewAllRowDetailsBehavior,
     ],
 
     listeners: {
@@ -317,14 +318,16 @@ first element in the cell will be focused. You can override the behavior by appl
       row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
       row.item = item;
       row.selected = this._isSelected(item);
-      row.expanded = this._isExpanded(item);
+	  row.expanded = this._isExpanded(item);
       row.active = item !== null && item == this.activeItem;
       row.focused = row.index === this.$.items._focusedRowIndex;
     },
 
+
     _getContentTarget: function() {
       return this;
     },
+
 
     ready: function() {
       this._updateColumnTree();
