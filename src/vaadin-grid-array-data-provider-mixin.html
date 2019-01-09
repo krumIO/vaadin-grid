@@ -128,6 +128,13 @@ This program is available under Apache License Version 2.0, available at https:/
       a = this._normalizeEmptyValue(a);
       b = this._normalizeEmptyValue(b);
 
+      if(a && isNaN(a)) {
+        a = a.toLowerCase().trim();
+      }
+      if(b && isNaN(b)) {
+        b = b.toLowerCase().trim();
+      }
+
       if (a < b) {
         return -1;
       }
